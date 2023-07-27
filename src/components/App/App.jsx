@@ -11,6 +11,12 @@ import { fetchImages } from 'services/Api';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+const notify = () => {
+  toast.info(
+    'There are not any images for your request...Please make another one'
+  );
+};
+
 export class App extends Component {
   state = {
     query: '',
@@ -20,12 +26,6 @@ export class App extends Component {
     largeImage: null,
     isLoading: false,
     showButton: false,
-  };
-
-  notify = () => {
-    toast.info(
-      'There are not any images for your request...Please make another one'
-    );
   };
 
   componentDidUpdate(_, prevState) {
@@ -46,7 +46,7 @@ export class App extends Component {
       const { hits, totalHits } = await fetchImages(query, page);
 
       if (!hits.length) {
-        this.notify();
+        notify();
         return;
       }
 
@@ -64,10 +64,6 @@ export class App extends Component {
   handleFormSubmit = query => {
     this.setState({ query, page: 1, images: [] });
   };
-
-  calculateTotalPages(total) {
-    this.setState({ totalPages: parseInt(total / 12) });
-  }
 
   setLargeImageURL = url => {
     this.setState({ largeImage: url });
